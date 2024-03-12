@@ -13,7 +13,7 @@ type Lead struct {
 	Name    string `json:"name"`
 	Company string `json:"company"`
 	Email   string `json:"email"`
-	Phone   int    `json:"phone"`
+	Phone   string `json:"phone"`
 }
 
 func GetLeads(ctx *fiber.Ctx) {
@@ -35,6 +35,20 @@ func NewLead(ctx *fiber.Ctx) {
 	if err := ctx.BodyParser(lead); err != nil {
 		l.Error("Body could not be parsed")
 		ctx.Status(503).Send(err)
+		return
+	}
+
+	var checkData Validator
+	checkData = Email{lead.Email}
+	if _, err := checkData.isValid(); err != nil {
+		l.Error("Email invalid")
+		ctx.Status(503).Send(err)
+		return
+	}
+	checkData = Phone{lead.Phone}
+	if _, err := checkData.isValid(); err != nil {
+		l.Error("Phone invalid")
+		ctx.Status(400).Send(err)
 		return
 	}
 	db.Create(&lead)

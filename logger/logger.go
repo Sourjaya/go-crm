@@ -15,12 +15,12 @@ func init() {
 	warnLog = log.New(os.Stdout, "WARN: ", flags)
 	errorLog = log.New(os.Stdout, "ERROR: ", flags)
 }
-func Info(str string) {
+func Info(str interface{}) {
 	infoLog.Println(str)
 }
-func Warn(str string) {
+func Warn(str interface{}) {
 	warnLog.Println(str)
 }
-func Error(str string) {
+func Error(str interface{}) {
 	errorLog.Println(str)
 }
